@@ -1,9 +1,6 @@
 #!/bin/sh
 echo "usage : source setenv.sh"
 
-
-
-
 export project_root=`pwd`
 export root_name=$(basename $project_root)
 echo "using $project_root as root directory"
@@ -22,8 +19,6 @@ path_in_prj(){
 	esac
 }
 export -f path_in_prj
-
-alias testou='path_in_prj && echo cbon $(reldir)'
 
 alias denv='path_in_prj && docker run -i -t -a STDIN -a STDOUT -a STDERR\
 	--volume $project_root:/home/devuser/w\
