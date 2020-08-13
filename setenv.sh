@@ -1,14 +1,17 @@
 #!/bin/sh
 echo "usage : source setenv.sh"
-local_cargo_dir=$HOME/.cargod
 
-mkdir -p $local_cargo_dir
-mkdir -p $local_cargo_dir/git
-mkdir -p $local_cargo_dir/registry
+
+
 
 export project_root=`pwd`
 export root_name=$(basename $project_root)
-echo "using $project_root as root"
+echo "using $project_root as root directory"
+
+local_cargo_dir=$project_root/.cargo-in-docker
+mkdir -p $local_cargo_dir
+mkdir -p $local_cargo_dir/git
+mkdir -p $local_cargo_dir/registry
 
 alias reldir='realpath --relative-to=$project_root .'
 
