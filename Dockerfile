@@ -12,15 +12,21 @@ RUN apt-get update && \
     echo "devuser:p@ssword1" | chpasswd &&  usermod -aG sudo devuser
 
 
-# install rust as devuser
+# install rust +wasm as devuser
 RUN su devuser &&  \ 
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | HOME=/home/devuser sh -s - -y &&\
     HOME=/home/devuser rustup target add wasm32-unknown-unknown
 
+RUN apt-get update && \
+    apt-get install -y openssl libssl-dev libssl1.1 pkg-config
 
-# install wasm stuff
 RUN su devuser &&  \ 
-    curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | HOME=/home/devuser sh
+    HOME=/home/devuser cargo install cargo-generate
+
+RUN su devuser &&  \ 
+    HOME=/home/devuser cargo install wasm-bindgen-cli
+RUN su devuser &&  \ 
+    HOME=/home/devuser cargo install wasm-pack
 
 #install wabt
 RUN su devuser \
