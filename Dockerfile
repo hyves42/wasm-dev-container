@@ -11,6 +11,9 @@ RUN apt-get update && \
     adduser --quiet --disabled-password --home /home/devuser --uid $uid --gecos "User" devuser && \
     echo "devuser:p@ssword1" | chpasswd &&  usermod -aG sudo devuser
 
+RUN npm install -g yarn 
+#RUN npm install  wasm-opt
+
 
 # install rust +wasm as devuser
 RUN su devuser &&  \ 
@@ -27,6 +30,12 @@ RUN su devuser &&  \
     HOME=/home/devuser cargo install wasm-bindgen-cli
 RUN su devuser &&  \ 
     HOME=/home/devuser cargo install wasm-pack
+RUN su devuser && \
+    HOME=/home/devuser cargo install tauri-bundler --force
+
+RUN apt-get update && \
+    apt-get install -y libwebkit2gtk-4.0-dev wget libssl-dev \
+    appmenu-gtk3-module libgtk-3-dev squashfs-tools
 
 #install wabt
 RUN su devuser \
@@ -36,12 +45,12 @@ RUN su devuser \
 RUN cd /home/devuser/wabt && make install
 
 #install binaryen
-RUN su devuser \
-    && cd /home/devuser \
-    && git clone https://github.com/WebAssembly/binaryen.git \
-    && cd binaryen \
-    && cmake . && make
-RUN cd /home/devuser/binaryen && make install
+#RUN su devuser \
+#    && cd /home/devuser \
+#    && git clone https://github.com/WebAssembly/binaryen.git \
+#    && cd binaryen \
+#    && cmake . && make
+#RUN cd /home/devuser/binaryen && make install
 
 RUN su devuser \
     && mkdir -p /home/devuser/w
